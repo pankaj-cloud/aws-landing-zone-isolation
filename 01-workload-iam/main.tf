@@ -92,6 +92,25 @@ resource "aws_iam_role_policy" "terraform_state_access" {
           "kms:GenerateDataKey"
         ]
         Resource = "arn:aws:kms:ap-south-1:361611338159:key/d518001f-b35d-4078-b541-91d1a78e8915"
+      },
+      {
+        Sid    = "EC2VPCPermissions"
+        Effect = "Allow"
+        Action = [
+          "ec2:CreateVpc",
+          "ec2:DeleteVpc",
+          "ec2:DescribeVpcs",
+          "ec2:DescribeVpcAttribute",
+          "ec2:ModifyVpcAttribute",
+          "ec2:CreateSubnet",
+          "ec2:DeleteSubnet",
+          "ec2:DescribeSubnets",
+          "ec2:DescribeAvailabilityZones",
+          "ec2:CreateTags",
+          "ec2:DeleteTags",
+          "ec2:DescribeTags"
+        ]
+        Resource = "*"
       }
     ]
   })
