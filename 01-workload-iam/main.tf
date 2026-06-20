@@ -16,7 +16,7 @@ provider "aws" {
 resource "aws_iam_role" "terraform_state_access" {
   name = "TerraformStateRole-workload"
 
-  # Trust policy — allow workload account to assume this role
+  # Trust policy — allow workload account and CI role to assume this role
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -25,6 +25,14 @@ resource "aws_iam_role" "terraform_state_access" {
         Effect = "Allow"
         Principal = {
           AWS = "arn:aws:iam::553752958960:root"
+        }
+        Action = "sts:AssumeRole"
+      },
+      {
+        Sid    = "AllowCIRoleToAssume"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::361611338159:role/TerraformCIRole-github"
         }
         Action = "sts:AssumeRole"
       }

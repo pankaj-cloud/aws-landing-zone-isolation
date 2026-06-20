@@ -7,14 +7,24 @@ terraform {
   }
 }
 
+# Default provider — management account (for state access)
 provider "aws" {
-  region  = "ap-south-1"
-  #profile = "workload"
+  region = "ap-south-1"
 }
 
-# Simple VPC — real infra in the workload account
-# State for this will live in management account S3
+# Workload provider — assumes into workload account for actual infra
+provider "aws" {
+  alias  = "workload"
+  region = "ap-south-1"
+
+  assume_role {
+    role_arn     = "arn:aws:iam::553752958960:role/TerraformStateRole-workload"
+    session_name = "GitHubActions-Workload"
+  }
+}
+
 resource "aws_vpc" "lab" {
+  provider             = aws.workload
   cidr_block           = "10.10.0.0/16"
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -29,6 +39,7 @@ resource "aws_vpc" "lab" {
 }
 
 resource "aws_subnet" "private" {
+  provider          = aws.workload
   vpc_id            = aws_vpc.lab.id
   cidr_block        = "10.10.1.0/24"
   availability_zone = "ap-south-1a"

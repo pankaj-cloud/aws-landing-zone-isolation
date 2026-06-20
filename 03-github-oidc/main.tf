@@ -120,6 +120,7 @@ resource "aws_iam_role_policy" "github_actions_terraform" {
           "ec2:CreateVpc",
           "ec2:DeleteVpc",
           "ec2:DescribeVpcs",
+          "ec2:DescribeVpcAttribute",
           "ec2:ModifyVpcAttribute",
           "ec2:CreateSubnet",
           "ec2:DeleteSubnet",
@@ -130,6 +131,12 @@ resource "aws_iam_role_policy" "github_actions_terraform" {
           "ec2:DescribeTags"
         ]
         Resource = "*"
+      },
+      {
+        Sid    = "AssumeWorkloadRole"
+        Effect = "Allow"
+        Action = "sts:AssumeRole"
+        Resource = "arn:aws:iam::553752958960:role/TerraformStateRole-workload"
       }
     ]
   })
