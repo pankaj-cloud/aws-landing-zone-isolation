@@ -24,9 +24,9 @@ on:
           - destroy
 
 permissions:
-  id-token: write   # Required for OIDC token generation
+  id-token: write
   contents: read
-  pull-requests: write  # Required to post plan output as PR comment
+  pull-requests: write
 
 env:
   TF_VERSION: '1.14.7'
@@ -68,17 +68,7 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        id: plan
-        run: |
-          terraform plan -out=tfplan -no-color 2>&1 | tee plan_output.txt
-          echo "exitcode=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
-
-      - name: Upload plan artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: tfplan
-          path: ${{ env.WORKING_DIR }}/tfplan
-          retention-days: 5
+        run: terraform plan -no-color 2>&1 | tee plan_output.txt
 
       - name: Post plan to PR comment
         if: github.event_name == 'pull_request'
@@ -99,11 +89,10 @@ jobs:
     name: Terraform Apply
     runs-on: ubuntu-latest
     needs: terraform-plan
-    # Only runs on merge to main or manual trigger with action=apply
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
       (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply')
-    environment: production  # This is the manual approval gate in GitHub
+    environment: production
     defaults:
       run:
         working-directory: ${{ env.WORKING_DIR }}
@@ -127,11 +116,8 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Download plan artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: tfplan
-          path: ${{ env.WORKING_DIR }}
+      - name: Terraform Plan fresh
+        run: terraform plan -out=tfplan -no-color
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
@@ -142,9 +128,8 @@ jobs:
   terraform-destroy:
     name: Terraform Destroy
     runs-on: ubuntu-latest
-    # Only runs on manual trigger with action=destroy
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy'
-    environment: production  # Manual approval gate applies here too
+    environment: production
     defaults:
       run:
         working-directory: ${{ env.WORKING_DIR }}
