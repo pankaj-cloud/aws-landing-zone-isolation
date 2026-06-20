@@ -6,9 +6,5 @@ terraform {
     encrypt        = true
     kms_key_id     = "arn:aws:kms:ap-south-1:361611338159:key/d518001f-b35d-4078-b541-91d1a78e8915"
     dynamodb_table = "terraform-state-lock"
-
-    assume_role = {
-      role_arn = "arn:aws:iam::361611338159:role/TerraformCIRole-github"
-    }
   }
 }
