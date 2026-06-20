@@ -108,7 +108,13 @@ resource "aws_iam_role_policy" "terraform_state_access" {
           "ec2:DescribeAvailabilityZones",
           "ec2:CreateTags",
           "ec2:DeleteTags",
-          "ec2:DescribeTags"
+          "ec2:DescribeTags",
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:DescribeNetworkAcls",
+          "ec2:DescribeRouteTables",
+          "ec2:DescribeSecurityGroups",
+          "ec2:DescribeInternetGateways",
+          "ec2:DescribeDhcpOptions"
         ]
         Resource = "*"
       }
