@@ -9,7 +9,7 @@ terraform {
 
 provider "aws" {
   region  = "ap-south-1"
-  profile = "workload"
+  #profile = "workload"
 }
 
 # Simple VPC — real infra in the workload account
