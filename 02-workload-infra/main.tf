@@ -18,7 +18,7 @@ provider "aws" {
   region = "ap-south-1"
 
   assume_role {
-    role_arn     = "arn:aws:iam::553752958960:role/TerraformStateRole-workload"
+    role_arn     = "arn:aws:iam::361611338159:role/TerraformStateRole-workload"
     session_name = "GitHubActions-Workload"
   }
 }
