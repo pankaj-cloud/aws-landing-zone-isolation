@@ -1,0 +1,22 @@
+why we have created kms resources here
+
+You should see 2 resources to create — the IAM role and inline policy. Notice the S3 policy 
+is scoped to workload/* only — this is the path-level isolation. A dev role would only get
+dev/*, prod role only prod/*.
+
+This init is the critical moment — watch it carefully. It will:
+
+Connect to S3 in the management account
+Assume TerraformStateRole-workload cross-account
+Verify DynamoDB table access
+Initialize the remote backend
+
+Share the full init output — success here means cross-account state access is working end to end.
+
+
+
+
+
+ ResourceValueS3 Bucket361611338159-tf-state-lab
+ DynamoDB Tableterraform-state-lock 
+ KMS Key ARNarn:aws:kms:ap-south-1:361611338159:key/d518001f-b35d-4078-b541-91d1a78e8915
