@@ -51,7 +51,7 @@ resource "aws_iam_role" "github_actions_terraform" {
           StringLike = {
             # Scoped to your repo — any branch (plan runs on all branches)
             # For apply/destroy we add branch check in the workflow itself
-            "token.actions.githubusercontent.com:sub" = "repo:Pankaj_Kumar_DevOps/aws-landing-zone-isolation:*"
+            "token.actions.githubusercontent.com:sub" = "repo:pankaj-cloud/aws-landing-zone-isolation:*"
           }
         }
       }
